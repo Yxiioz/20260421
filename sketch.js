@@ -23,8 +23,15 @@ function draw() {
   let x = (width - videoWidth) / 2;
   let y = (height - videoHeight) / 2;
   
-  // 將攝影機影像繪製到畫布的指定位置與大小
-  image(capture, x, y, videoWidth, videoHeight);
+  // 修正攝影機左右顛倒：利用 push() 和 pop() 限定座標系統的變更範圍
+  push();
+  // 將畫布的起始原點移動到影像預計顯示的右側邊界位置
+  translate(x + videoWidth, y);
+  // 進行水平翻轉 (-1 代表水平顛倒，1 代表垂直維持原樣)
+  scale(-1, 1);
+  // 繪製影像：因為原點和方向已經翻轉，只要從 (0,0) 開始畫即可達到置中且鏡像的效果
+  image(capture, 0, 0, videoWidth, videoHeight);
+  pop();
 }
 
 // 加入這個函式：當瀏覽器視窗大小改變時，動態調整畫布大小以維持全螢幕
